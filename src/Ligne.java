@@ -5,11 +5,11 @@ import java.util.List;
 public class Ligne {
 
     private String nom;
-    private List<Fragment> lFragment;
+    private int nbStation;
 
     public Ligne(String n) {
         nom = n;
-        lFragment = new LinkedList<>();
+        nbStation = 0;
     }
 
     //nom
@@ -19,19 +19,6 @@ public class Ligne {
 
     public void setNom(String newname) {
         nom = newname;
-    }
-
-    //Fragment
-    public List<Fragment> getListeFragments() {
-        return lFragment;
-    }
-
-    public void setListeFragment(LinkedList newfrag) {
-        lFragment = newfrag;
-    }
-
-    public boolean addFragment(Fragment f) {
-        return lFragment.add(f);
     }
 
     @Override
@@ -58,6 +45,6 @@ public class Ligne {
 
     @Override
     public String toString() {
-        return nom + " : " + (lFragment.size()+1) + " stations.";
+        return "Ligne " + nom + " (" + nbStation + " stations)";
     }
 }

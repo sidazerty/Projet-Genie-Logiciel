@@ -1,21 +1,29 @@
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Fragment {
 
     private Station depart, arrivee;
     private int tempsParcours;
+    private Set<Ligne> lignes;
     private Incident incident;
     
-    public Fragment(Station sd, Station sa, int tp) {
+    public Fragment(Station sd, Station sa, int tp, Ligne l) {
         tempsParcours = tp;
         incident = null;
         depart = sd;
         arrivee = sa;
+        lignes = new HashSet<>();
+        lignes.add(l);
     }
 	
-	public Fragment(Station dep, Station arr, int tpsparc, Incident inci) {
+	public Fragment(Station dep, Station arr, int tpsparc, Ligne l, Incident inci) {
         depart=dep;
         arrivee=arr;
         tempsParcours=tpsparc;
+        lignes = new HashSet<>();
+        lignes.add(l);
         incident=inci;
     }
 
@@ -37,13 +45,18 @@ public class Fragment {
         arrivee=newarr;
     }
 	
-	//temps de parcours 
+    //temps de parcours 
     public int getTempsDeParcours(){
         return tempsParcours;
     }
     
     public void setTempsDeParcours(int newtpsparc){
         tempsParcours=newtpsparc;
+    }
+    
+    //Lignes
+    public boolean addLigne(Ligne l) {
+        return lignes.add(l);
     }
     
     //incident
