@@ -14,29 +14,29 @@ import java.util.Set;
 public class Plan {
 
     private Set<Station> stations;
-    private Set<Ligne> lignes;
+    private Set<Fragment> fragments;
     private Station util;
 
     public Plan() {
         stations = new HashSet<>();
-        lignes = new HashSet<>();
+        fragments = new HashSet<>();
         util = null;
     }
 
     public Plan(String fichier) {
         stations = new HashSet<>();
-        lignes = new HashSet<>();
+        fragments = new HashSet<>();
         util = null;
         chargementPlan(fichier);
     }
 
-    //Lignes
-    public Set<Ligne> getLignes() {
-        return lignes;
+    //Fragment
+    public Set<Fragment> getFragment() {
+        return fragments;
     }
 
-    public boolean addLignes(Ligne l) {
-        return lignes.add(l);
+    public boolean addFragment(Fragment f) {
+        return fragments.add(f);
     }
 
     //Stations
@@ -66,14 +66,14 @@ public class Plan {
 
             String ligne;
             while ((ligne = br.readLine()) != null) {
-                traitementLigne(ligne);
+                traitementLigneTexte(ligne);
             }
         } catch (Exception e) {
             System.out.println(e.toString());
         }
     }
 
-    public void traitementLigne(String chaine) {
+    public void traitementLigneTexte(String chaine) {
         if (chaine != null) {
             String[] ligne = chaine.split("\t");
 
@@ -93,28 +93,16 @@ public class Plan {
                 stations.add(sd);
                 stations.add(sa);
 
-                // creation du fragment 
-                Fragment d = new Fragment(sd, sa, Integer.parseInt(ligne[4]));
-
                 //creation d'une ligne 
                 Ligne li = new Ligne(ligne[5].toUpperCase());
+                
+                // creation du fragment 
+                Fragment d = new Fragment(sd, sa, Integer.parseInt(ligne[4]));
+                //ajout de la ligne
+                d.addLigne(li);
 
-                //verification de l'existence de la ligne 
-                if (lignes.contains(li)) {
-                    Iterator<Ligne> it = lignes.iterator();
-                    Ligne l;
-                    while (it.hasNext()) {
-                        l = it.next();
-
-                        if (l.equals(li)) {
-                            l.addFragment(d);
-                        }
-                    }
-                } //si la ligne n'existe pas on l'ajoute
-                else {
-                    li.addFragment(d);
-                    lignes.add(li);
-                }
+                // Ajout du fragment dans le plan
+                fragments.add(d);
             }
         }
     }
@@ -123,18 +111,12 @@ public class Plan {
     public String toString() {
         String s = "* Plan :";
         s += "\n\t- Nombre de stations : " + stations.size();
-        s += "\n\t- Nombre de lignes : " + lignes.size();
+        s += "\n\t- Nombre de fragments : " + fragments.size();
         s += "\n";
         s += "* Stations :";
         Iterator<Station> is = stations.iterator();
         while (is.hasNext()) {
             s += "\n\t- " + is.next();
-        }
-        s += "\n";
-        s += "* Lignes :";
-        Iterator<Ligne> il = lignes.iterator();
-        while (il.hasNext()) {
-            s += "\n\t- " + il.next();
         }
         return s;
     }

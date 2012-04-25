@@ -1,5 +1,6 @@
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class Fragment {
@@ -9,21 +10,19 @@ public class Fragment {
     private Set<Ligne> lignes;
     private Incident incident;
     
-    public Fragment(Station sd, Station sa, int tp, Ligne l) {
+    public Fragment(Station sd, Station sa, int tp) {
         tempsParcours = tp;
         incident = null;
         depart = sd;
         arrivee = sa;
         lignes = new HashSet<>();
-        lignes.add(l);
     }
 	
-	public Fragment(Station dep, Station arr, int tpsparc, Ligne l, Incident inci) {
+	public Fragment(Station dep, Station arr, int tpsparc, Incident inci) {
         depart=dep;
         arrivee=arr;
         tempsParcours=tpsparc;
         lignes = new HashSet<>();
-        lignes.add(l);
         incident=inci;
     }
 
@@ -72,4 +71,37 @@ public class Fragment {
     public String toString() {
         return "tempsParcours=" + tempsParcours + ", depart=" + depart + ", arrivee=" + arrivee;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Fragment other = (Fragment) obj;
+        if (!(Objects.equals(this.depart, other.depart)
+            || Objects.equals(this.depart, other.arrivee))) {
+            return false;
+        }
+        if (!(Objects.equals(this.arrivee, other.depart)
+            || Objects.equals(this.arrivee, other.arrivee))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 19 * hash + Objects.hashCode(this.depart);
+        hash = 19 * hash + Objects.hashCode(this.arrivee);
+        hash = 19 * hash + this.tempsParcours;
+        hash = 19 * hash + Objects.hashCode(this.lignes);
+        hash = 19 * hash + Objects.hashCode(this.incident);
+        return hash;
+    }
+    
+    
 }
